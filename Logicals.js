@@ -177,7 +177,6 @@ console.log(minMax([])); // Output: []
 // largestSwap(43) ➞ true
 // If 27 is our input, we should return false because swapping the digits gives us 72, and 72 > 27. On the other hand, swapping 43 gives us 34, and 43 > 34.
 
-
 function largestSwap(num) {
   // Extract digits
   const digit1 = Math.floor(num / 10);
@@ -188,5 +187,195 @@ function largestSwap(num) {
 }
 
 // Examples
-console.log(largestSwap(27));  // Output: false
-console.log(largestSwap(43));  // Output: true
+console.log(largestSwap(27)); // Output: false
+console.log(largestSwap(43)); // Output: true
+
+// Question 9 : Write a function expect that helps developers test their code. It should take in any value val and return an object with the following two functions.
+
+// toBe(val) accepts another value and returns true if the two values === each other. If they are not equal, it should throw an error "Not Equal".
+// notToBe(val) accepts another value and returns true if the two values !== each other. If they are equal, it should throw an error "Equal".
+
+var expect = function (val) {
+  return {
+    toBe: function (otherVal) {
+      if (val !== otherVal) {
+        throw new Error("Not Equal");
+      }
+      return true;
+    },
+    notToBe: function (otherVal) {
+      if (val === otherVal) {
+        throw new Error("Equal");
+      }
+      return true;
+    },
+  };
+};
+
+/**
+ * expect(5).toBe(5); // true
+ * expect(5).notToBe(5); // throws "Equal"
+ */
+
+// Question 10 : Given an integer array arr and a mapping function fn, return a new array with a transformation applied to each element.
+
+// The returned array should be created such that returnedArray[i] = fn(arr[i], i).
+
+// Please solve it without the built-in Array.map method.
+
+var map = function (arr, fn) {
+  let result = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    result.push(fn(arr[i], i));
+  }
+
+  return result;
+};
+
+// Example 1
+const arr1 = [1, 2, 3];
+const plusOne = function (n) {
+  return n + 1;
+};
+const newArray1 = map(arr1, plusOne);
+console.log(newArray1); // Output: [2, 3, 4]
+
+// Example 2
+const arr2 = [1, 2, 3];
+const plusI = function (n, i) {
+  return n + i;
+};
+const newArray2 = map(arr2, plusI);
+console.log(newArray2); // Output: [1, 3, 5]
+
+// Example 3
+const arr3 = [10, 20, 30];
+const constant = function () {
+  return 42;
+};
+const newArray3 = map(arr3, constant);
+console.log(newArray3); // Output: [42, 42, 42]
+
+// Question 11:Given an integer array arr and a filtering function fn, return a filtered array filteredArr.
+// The fn function takes one or two arguments:arr[i] - number from the arr , i - index of arr[i]
+// filteredArr should only contain the elements from the arr for which the expression fn(arr[i], i) evaluates to a truthy value. A truthy value is a value where Boolean(value) returns true.
+
+// Please solve it without the built-in Array.filter method.
+
+// Example 1:
+
+// Input: arr = [0,10,20,30], fn = function greaterThan10(n) { return n > 10; }
+// Output: [20,30]
+// Explanation:
+// const newArray = filter(arr, fn); // [20, 30]
+// The function filters out values that are not greater than 10
+// Example 2:
+
+// Input: arr = [1,2,3], fn = function firstIndex(n, i) { return i === 0; }
+// Output: [1]
+// Explanation:
+// fn can also accept the index of each element
+// In this case, the function removes elements not at index 0
+// Example 3:
+
+// Input: arr = [-2,-1,0,1,2], fn = function plusOne(n) { return n + 1 }
+// Output: [-2,0,1,2]
+// Explanation:
+// Falsey values such as 0 should be filtered out
+
+
+var filter = function(arr, fn) {
+  let filteredArr = [];
+
+  for (let i = 0; i < arr.length; i++) {
+      if (fn(arr[i], i)) {
+          filteredArr.push(arr[i]);
+      }
+  }
+
+  return filteredArr;
+};
+
+// Example usage
+const arr = [1, 2, 3, 4, 5];
+const isEven = function(n) { return n % 2 === 0; }
+const filteredArray = filter(arr, isEven);
+console.log(filteredArray); // Output: [2, 4]
+
+// Question 12: Given a function fn, return a new function that is identical to the original function except that it ensures fn is called at most once.
+// The first time the returned function is called, it should return the same result as fn.
+// Every subsequent time it is called, it should return undefined.
+
+var once = function(fn) {
+  let called = false;
+  let result;
+
+  return function(...args) {
+      if (!called) {
+          called = true;
+          result = fn(...args);
+          return result;
+      } else {
+          return undefined;
+      }
+  };
+};
+
+// Example 1
+const addNumbers = (a, b, c) => (a + b + c);
+const onceAddNumbers = once(addNumbers);
+
+console.log(onceAddNumbers(1, 2, 3)); // Output: 6
+console.log(onceAddNumbers(2, 3, 6)); // Output: undefined
+
+// Example 2
+const multiplyNumbers = (a, b, c) => (a * b * c);
+const onceMultiplyNumbers = once(multiplyNumbers);
+
+console.log(onceMultiplyNumbers(5, 7, 4)); // Output: 140
+console.log(onceMultiplyNumbers(2, 3, 6)); // Output: undefined
+console.log(onceMultiplyNumbers(4, 6, 8)); // Output: undefined
+
+
+// Question 13: Given a function fn, return a memoized version of that function.A memoized function is a function that will never be called twice with the same inputs. Instead it will return a cached value.
+// You can assume there are 3 possible input functions: sum, fib, and factorial. sum accepts two integers a and b and returns a + b.
+// fib accepts a single integer n and returns 1 if n <= 1 or fib(n - 1) + fib(n - 2) otherwise. factorial accepts a single integer n and returns 1 if n <= 1 or factorial(n - 1) * n otherwise.
+
+function memoize(fn) {
+  const cache = {};
+
+  return function(...args) {
+      const key = JSON.stringify(args);
+
+      if (cache[key] === undefined) {
+          cache[key] = fn(...args);
+      }
+
+      return cache[key];
+  };
+}
+
+// Example usage with sum
+const sum = memoize((a, b) => a + b);
+
+console.log(sum(2, 3)); // Output: 5
+console.log(sum(2, 3)); // Output: 5 (result is retrieved from the cache)
+
+// Example usage with fib
+const fib = memoize(function(n) {
+  return (n <= 1) ? 1 : fib(n - 1) + fib(n - 2);
+});
+
+console.log(fib(4)); // Output: 5
+console.log(fib(4)); // Output: 5 (result is retrieved from the cache)
+
+// Example usage with factorial
+const factorial = memoize(function(n) {
+  return (n <= 1) ? 1 : factorial(n - 1) * n;
+});
+
+console.log(factorial(5)); // Output: 120
+console.log(factorial(5)); // Output: 120 (result is retrieved from the cache)
+
+Question 14 : 
