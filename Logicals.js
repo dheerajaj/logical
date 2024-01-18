@@ -284,14 +284,13 @@ console.log(newArray3); // Output: [42, 42, 42]
 // Explanation:
 // Falsey values such as 0 should be filtered out
 
-
-var filter = function(arr, fn) {
+var filter = function (arr, fn) {
   let filteredArr = [];
 
   for (let i = 0; i < arr.length; i++) {
-      if (fn(arr[i], i)) {
-          filteredArr.push(arr[i]);
-      }
+    if (fn(arr[i], i)) {
+      filteredArr.push(arr[i]);
+    }
   }
 
   return filteredArr;
@@ -299,7 +298,9 @@ var filter = function(arr, fn) {
 
 // Example usage
 const arr = [1, 2, 3, 4, 5];
-const isEven = function(n) { return n % 2 === 0; }
+const isEven = function (n) {
+  return n % 2 === 0;
+};
 const filteredArray = filter(arr, isEven);
 console.log(filteredArray); // Output: [2, 4]
 
@@ -307,36 +308,35 @@ console.log(filteredArray); // Output: [2, 4]
 // The first time the returned function is called, it should return the same result as fn.
 // Every subsequent time it is called, it should return undefined.
 
-var once = function(fn) {
+var once = function (fn) {
   let called = false;
   let result;
 
-  return function(...args) {
-      if (!called) {
-          called = true;
-          result = fn(...args);
-          return result;
-      } else {
-          return undefined;
-      }
+  return function (...args) {
+    if (!called) {
+      called = true;
+      result = fn(...args);
+      return result;
+    } else {
+      return undefined;
+    }
   };
 };
 
 // Example 1
-const addNumbers = (a, b, c) => (a + b + c);
+const addNumbers = (a, b, c) => a + b + c;
 const onceAddNumbers = once(addNumbers);
 
 console.log(onceAddNumbers(1, 2, 3)); // Output: 6
 console.log(onceAddNumbers(2, 3, 6)); // Output: undefined
 
 // Example 2
-const multiplyNumbers = (a, b, c) => (a * b * c);
+const multiplyNumbers = (a, b, c) => a * b * c;
 const onceMultiplyNumbers = once(multiplyNumbers);
 
 console.log(onceMultiplyNumbers(5, 7, 4)); // Output: 140
 console.log(onceMultiplyNumbers(2, 3, 6)); // Output: undefined
 console.log(onceMultiplyNumbers(4, 6, 8)); // Output: undefined
-
 
 // Question 13: Given a function fn, return a memoized version of that function.A memoized function is a function that will never be called twice with the same inputs. Instead it will return a cached value.
 // You can assume there are 3 possible input functions: sum, fib, and factorial. sum accepts two integers a and b and returns a + b.
@@ -345,14 +345,14 @@ console.log(onceMultiplyNumbers(4, 6, 8)); // Output: undefined
 function memoize(fn) {
   const cache = {};
 
-  return function(...args) {
-      const key = JSON.stringify(args);
+  return function (...args) {
+    const key = JSON.stringify(args);
 
-      if (cache[key] === undefined) {
-          cache[key] = fn(...args);
-      }
+    if (cache[key] === undefined) {
+      cache[key] = fn(...args);
+    }
 
-      return cache[key];
+    return cache[key];
   };
 }
 
@@ -363,19 +363,220 @@ console.log(sum(2, 3)); // Output: 5
 console.log(sum(2, 3)); // Output: 5 (result is retrieved from the cache)
 
 // Example usage with fib
-const fib = memoize(function(n) {
-  return (n <= 1) ? 1 : fib(n - 1) + fib(n - 2);
+const fib = memoize(function (n) {
+  return n <= 1 ? 1 : fib(n - 1) + fib(n - 2);
 });
 
 console.log(fib(4)); // Output: 5
 console.log(fib(4)); // Output: 5 (result is retrieved from the cache)
 
 // Example usage with factorial
-const factorial = memoize(function(n) {
-  return (n <= 1) ? 1 : factorial(n - 1) * n;
+const factorial = memoize(function (n) {
+  return n <= 1 ? 1 : factorial(n - 1) * n;
 });
 
 console.log(factorial(5)); // Output: 120
 console.log(factorial(5)); // Output: 120 (result is retrieved from the cache)
 
-Question 14 : 
+// Question 14 : Given a function fn, an array of arguments args, and a timeout t in milliseconds, return a cancel function cancelFn.
+// After a delay of cancelTimeMs, the returned cancel function cancelFn will be invoked.setTimeout(cancelFn, cancelTimeMs)
+// Initially, the execution of the function fn should be delayed by t milliseconds.If, before the delay of t milliseconds, the function cancelFn is invoked, it
+// should cancel the delayed execution of fn. Otherwise, if cancelFn is not invoked within the specified delay t, fn should be executed with the provided args as arguments.
+
+var cancellable = function (fn, args, t) {
+  let timeoutId;
+  let isCancelled = false;
+
+  const cancelFn = function () {
+    if (!isCancelled) {
+      clearTimeout(timeoutId);
+      isCancelled = true;
+    }
+  };
+
+  timeoutId = setTimeout(() => {
+    if (!isCancelled) {
+      const result = fn(...args);
+      console.log([{ time: t, returned: result }]);
+    }
+  }, t);
+
+  return cancelFn;
+};
+
+// Example usage:
+
+// Example 1
+const cancelTimeMs1 = 50;
+const cancelFn1 = cancellable((x) => x * 5, [2], 20);
+setTimeout(cancelFn1, cancelTimeMs1);
+
+// Example 2
+const cancelTimeMs2 = 50;
+const cancelFn2 = cancellable((x) => x ** 2, [2], 100);
+setTimeout(cancelFn2, cancelTimeMs2);
+
+// Example 3
+const cancelTimeMs3 = 100;
+const cancelFn3 = cancellable((x1, x2) => x1 * x2, [2, 4], 30);
+setTimeout(cancelFn3, cancelTimeMs3);
+
+// Question 15 : Given a function fn, an array of arguments args, and an interval time t, return a cancel function cancelFn.
+// After a delay of cancelTimeMs, the returned cancel function cancelFn will be invoked.setTimeout(cancelFn, cancelTimeMs)
+// The function fn should be called with args immediately and then called again every t milliseconds until cancelFn is called at cancelTimeMs ms.
+
+var cancellable = function (fn, args, t) {
+  let intervalId;
+  let time = 0;
+  const resultArray = [];
+
+  const executeFn = function () {
+    const result = fn(...args);
+    resultArray.push({ time: time, returned: result });
+  };
+
+  executeFn(); // Call the function immediately
+
+  // Set up the interval to call the function every t milliseconds
+  intervalId = setInterval(() => {
+    time += t;
+    executeFn();
+  }, t);
+
+  const cancelFn = function () {
+    clearInterval(intervalId);
+    console.log(resultArray);
+  };
+
+  return cancelFn;
+};
+
+// // Example 1
+// const cancelTimeMs1 = 190;
+// const cancelFn1 = cancellable((x) => x * 2, [4], 35);
+// setTimeout(cancelFn1, cancelTimeMs1);
+
+// // Example 2
+// const cancelTimeMs2 = 165;
+// const cancelFn2 = cancellable((x1, x2) => x1 * x2, [2, 5], 30);
+// setTimeout(cancelFn2, cancelTimeMs2);
+
+// // Example 3
+// const cancelTimeMs3 = 180;
+// const cancelFn3 = cancellable((x1, x2, x3) => x1 + x2 + x3, [5, 1, 3], 50);
+// setTimeout(cancelFn3, cancelTimeMs3);
+
+// Question 16: Given an asynchronous function fn and a time t in milliseconds, return a new time limited version of the input function. fn takes arguments provided to the time limited function.
+// The time limited function should follow these rules:
+// If the fn completes within the time limit of t milliseconds, the time limited function should resolve with the result.
+// If the execution of the fn exceeds the time limit, the time limited function should reject with the string "Time Limit Exceeded".
+
+function timeLimit(fn, t) {
+  return async function (...args) {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject("Time Limit Exceeded");
+      }, t);
+      fn(...args)
+        .then((result) => {
+          clearTimeout(timeout);
+          resolve(result);
+        })
+        .catch((error) => {
+          clearTimeout(timeout);
+          reject(error);
+        });
+    });
+  };
+}
+
+// Example usage
+const fn1 = async (n) => {
+  await new Promise((res) => setTimeout(res, 100));
+  return n * n;
+};
+const limited1 = timeLimit(fn1, 50);
+
+const fn2 = async (a, b) => {
+  await new Promise((res) => setTimeout(res, 120));
+  return a + b;
+};
+const limited2 = timeLimit(fn2, 150);
+
+const fn3 = async () => {
+  throw "Error";
+};
+const limited3 = timeLimit(fn3, 1000);
+
+(async () => {
+  try {
+    const result1 = await limited1(5);
+    console.log({ resolved: result1, time: 50 });
+  } catch (err) {
+    console.log({ rejected: err, time: 50 });
+  }
+
+  try {
+    const result2 = await limited2(5, 10);
+    console.log({ resolved: result2, time: 120 });
+  } catch (err) {
+    console.log({ rejected: err, time: 120 });
+  }
+
+  try {
+    const result3 = await limited3();
+    console.log({ resolved: result3, time: 0 });
+  } catch (err) {
+    console.log({ rejected: err, time: 0 });
+  }
+})();
+
+// Question 17: Given an object or an array, return if it is empty.
+// An empty object contains no key-value pairs.
+// An empty array contains no elements.
+// You may assume the object or array is the output of JSON.parse.
+
+var isEmpty = function (obj) {
+  if (Array.isArray(obj)) {
+    return obj.length === 0;
+  } else if (typeof obj === "object" && obj !== null) {
+    return Object.keys(obj).length === 0;
+  }
+  return false;
+};
+
+// Examples:
+console.log(isEmpty({})); // Output: true
+console.log(isEmpty([])); // Output: true
+console.log(isEmpty({ key: "value" })); // Output: false
+console.log(isEmpty([1, 2, 3])); // Output: false
+console.log(isEmpty(null)); // Output: false
+console.log(isEmpty(undefined)); // Output: false
+console.log(isEmpty(42)); // Output: false
+
+// Question 18 :Given an array arr and a chunk size size, return a chunked array. A chunked array contains the original elements in arr, but consists of subarrays each of length size. The length of the last subarray may be less than size if arr.length is not evenly divisible by size.
+// You may assume the array is the output of JSON.parse. In other words, it is valid JSON.
+// Please solve it without using lodash's _.chunk function.
+
+var chunkArray = function (arr, size) {
+  if (size <= 0) {
+    throw new Error("Size must be greater than 0");
+  }
+
+  const chunkedArray = [];
+  let index = 0;
+
+  while (index < arr.length) {
+    chunkedArray.push(arr.slice(index, index + size));
+    index += size;
+  }
+
+  return chunkedArray;
+};
+
+// Example usage:
+const inputArray = [1, 2, 3, 4, 5, 6, 7, 8];
+const chunkSize = 3;
+
+console.log(chunkArray(inputArray, chunkSize));
+// Output: [ [1, 2, 3], [4, 5, 6], [7, 8] ]
