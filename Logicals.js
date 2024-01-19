@@ -580,3 +580,54 @@ const chunkSize = 3;
 
 console.log(chunkArray(inputArray, chunkSize));
 // Output: [ [1, 2, 3], [4, 5, 6], [7, 8] ]
+
+
+// Question 19: Write code that enhances all arrays such that you can call the array.last() method on any array and it will return the last element. If there are no elements in the array, it should return -1.
+// You may assume the array is the output of JSON.parse.
+
+Array.prototype.last = function() {
+  if (this.length === 0) {
+      return -1;
+  } else {
+      return this[this.length - 1];
+  }
+};
+
+// Example usage:
+const nums1 = [null, {}, 3];
+console.log(nums1.last());  // Output: 3
+
+const nums2 = [];
+console.log(nums2.last());  // Output: -1
+
+// Question 20; Given an object or array obj, return a compact object. A compact object is the same as the original object, except with keys containing falsy values removed. This operation applies to the object and any nested objects. Arrays are considered objects where the indices are keys. A value is considered falsy when Boolean(value) returns false.
+// You may assume the obj is the output of JSON.parse. In other words, it is valid JSON.
+  
+function compact(obj) {
+  if (Array.isArray(obj)) {
+      return obj
+          .filter(item => Boolean(compact(item)))
+          .map(compact);
+  } else if (typeof obj === 'object' && obj !== null) {
+      const result = {};
+      for (const key in obj) {
+          const compactedValue = compact(obj[key]);
+          if (Boolean(compactedValue)) {
+              result[key] = compactedValue;
+          }
+      }
+      return result;
+  } else {
+      return obj;
+  }
+}
+
+// Example usage:
+const obj1 = [null, 0, false, 1];
+console.log(compact(obj1));  // Output: [1]
+
+const obj2 = { "a": null, "b": [false, 1] };
+console.log(compact(obj2));  // Output: {"b": [1]}
+
+const obj3 = [null, 0, 5, [0], [false, 16]];
+console.log(compact(obj3));  // Output: [5, [], [16]]
