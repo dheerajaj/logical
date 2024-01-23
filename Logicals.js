@@ -631,3 +631,63 @@ console.log(compact(obj2));  // Output: {"b": [1]}
 
 const obj3 = [null, 0, 5, [0], [false, 16]];
 console.log(compact(obj3));  // Output: [5, [], [16]]
+
+// Question 21 : You are given two strings word1 and word2. Merge the strings by adding letters in alternating order, starting with word1. 
+// If a string is longer than the other, append the additional letters onto the end of the merged string.
+// Return the merged string. (C++)
+
+
+#include <string>
+
+class Solution {
+public:
+    std::string mergeAlternately(std::string word1, std::string word2) {
+        std::string merged;
+        int maxLength = std::max(word1.length(), word2.length());
+
+        for (int i = 0; i < maxLength; i++) {
+            if (i < word1.length()) {
+                merged.push_back(word1[i]);
+            }
+
+            if (i < word2.length()) {
+                merged.push_back(word2[i]);
+            }
+        }
+
+        return merged;
+    }
+};
+
+// Question 22: Create a class ArrayWrapper that accepts an array of integers in its constructor. This class should have two features:
+// When two instances of this class are added together with the + operator, the resulting value is the sum of all the elements in both arrays.
+// When the String() function is called on the instance, it will return a comma separated string surrounded by brackets. For example, [1,2,3].
+
+class ArrayWrapper {
+  constructor(nums) {
+      this.array = nums;
+  }
+
+  valueOf() {
+      return this.array.reduce((sum, num) => sum + num, 0);
+  }
+
+  toString() {
+      return '[' + this.array.join(',') + ']';
+  }
+}
+
+// Example usage:
+// const obj1 = new ArrayWrapper([1, 2]);
+// const obj2 = new ArrayWrapper([3, 4]);
+
+// Adding two instances using the + operator
+const sumResult = obj1 + obj2;
+console.log(sumResult); // Output: 10
+
+const obj = new ArrayWrapper([23, 98, 42, 70]);
+
+// Calling String() function on the instance
+const stringResult = String(obj);
+console.log(stringResult); // Output: "[23,98,42,70]"
+
