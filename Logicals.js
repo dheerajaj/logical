@@ -691,3 +691,112 @@ const obj = new ArrayWrapper([23, 98, 42, 70]);
 const stringResult = String(obj);
 console.log(stringResult); // Output: "[23,98,42,70]"
 
+
+// Question 23 : Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. 
+// If target exists, then return its index. Otherwise, return -1.You must write an algorithm with O(log n) runtime complexity.
+
+#include <vector>
+
+class Solution {
+public:
+    int search(std::vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] == target) {
+                return mid; // Target found
+            } else if (nums[mid] < target) {
+                left = mid + 1; // Target is in the right half
+            } else {
+                right = mid - 1; // Target is in the left half
+            }
+        }
+
+        return -1; // Target not found
+    }
+};
+
+
+// Question 24: Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+// You must write an algorithm with O(log n) runtime complexity.A
+
+#include <vector>
+
+class Solution {
+public:
+    int searchInsert(std::vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] == target) {
+                return mid; // Target found
+            } else if (nums[mid] < target) {
+                left = mid + 1; // Target is in the right half
+            } else {
+                right = mid - 1; // Target is in the left half
+            }
+        }
+
+        return left; // Target not found, return the position where it should be inserted
+    }
+};
+
+// Question 25:You are given an array of characters letters that is sorted in non-decreasing order, and a character target. There are at least two different characters in letters.
+
+// Return the smallest character in letters that is lexicographically greater than target. If such a character does not exist, return the first character in letters.
+
+
+
+#include <vector>
+
+class Solution {
+public:
+    char nextGreatestLetter(std::vector<char>& letters, char target) {
+        int left = 0, right = letters.size();
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (letters[mid] <= target) {
+                left = mid + 1;  // Target is in the right half
+            } else {
+                right = mid;  // Target is in the left half or current character is a potential answer
+            }
+        }
+
+        // If right is equal to the size of the array, wrap around to the beginning
+        return letters[right % letters.size()];
+    }
+};
+
+
+// Question 26 : Given a m x n matrix grid which is sorted in non-increasing order both row-wise and column-wise, return the number of negative numbers in grid.
+
+#include <vector>
+
+class Solution {
+public:
+    int countNegatives(std::vector<std::vector<int>>& grid) {
+        int count = 0;
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        int row = 0;
+        int col = cols - 1;
+
+        while (row < rows && col >= 0) {
+            if (grid[row][col] < 0) {
+                count += (rows - row); // All elements below the current row are negative
+                col--; // Move left in the same row
+            } else {
+                row++; // Move down to the next row
+            }
+        }
+
+        return count;
+    }
+};
