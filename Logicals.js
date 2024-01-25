@@ -800,3 +800,74 @@ public:
         return count;
     }
 };
+
+
+// Question 27 :For two strings s and t, we say "t divides s" if and only if s = t + ... + t (i.e., t is concatenated with itself one or more times).
+// Given two strings str1 and str2, return the largest string x such that x divides both str1 and str2.
+
+#include <string>
+
+class Solution {
+public:
+    string gcdOfStrings(string str1, string str2) {
+        int len1 = str1.length();
+        int len2 = str2.length();
+
+        // Find the GCD of lengths
+        int gcdLen = gcd(len1, len2);
+
+        // Extract a substring of length GCD from both strings
+        string substring = str1.substr(0, gcdLen);
+
+        // Check if the substring is a valid divisor for both strings
+        if (isDivisor(str1, substring) && isDivisor(str2, substring)) {
+            return substring;
+        } else {
+            return "";
+        }
+    }
+
+private:
+    // Function to find the GCD of two numbers
+    int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // Function to check if 'substring' is a valid divisor of 'str'
+    bool isDivisor(string str, string substring) {
+        int strLen = str.length();
+        int subLen = substring.length();
+
+        // Check if 'substring' can divide 'str' completely
+        for (int i = 0; i < strLen; i += subLen) {
+            if (str.substr(i, subLen) != substring) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+
+
+// Question 28 : Return a boolean array result of length n, where result[i] is true if, after giving the ith kid all the extraCandies, they will have the greatest number of candies among all the kids, or false otherwise.
+// Note that multiple kids can have the greatest number of candies.
+
+ 
+
+#include <vector>
+
+class Solution {
+public:
+    std::vector<bool> kidsWithCandies(std::vector<int>& candies, int extraCandies) {
+        int maxCandies = *std::max_element(candies.begin(), candies.end());
+
+        std::vector<bool> result;
+        for (int i = 0; i < candies.size(); ++i) {
+            result.push_back(candies[i] + extraCandies >= maxCandies);
+        }
+
+        return result;
+    }
+};
