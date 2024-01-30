@@ -585,11 +585,11 @@ console.log(chunkArray(inputArray, chunkSize));
 // Question 19: Write code that enhances all arrays such that you can call the array.last() method on any array and it will return the last element. If there are no elements in the array, it should return -1.
 // You may assume the array is the output of JSON.parse.
 
-Array.prototype.last = function() {
+Array.prototype.last = function () {
   if (this.length === 0) {
-      return -1;
+    return -1;
   } else {
-      return this[this.length - 1];
+    return this[this.length - 1];
   }
 };
 
@@ -602,23 +602,23 @@ console.log(nums2.last());  // Output: -1
 
 // Question 20; Given an object or array obj, return a compact object. A compact object is the same as the original object, except with keys containing falsy values removed. This operation applies to the object and any nested objects. Arrays are considered objects where the indices are keys. A value is considered falsy when Boolean(value) returns false.
 // You may assume the obj is the output of JSON.parse. In other words, it is valid JSON.
-  
+
 function compact(obj) {
   if (Array.isArray(obj)) {
-      return obj
-          .filter(item => Boolean(compact(item)))
-          .map(compact);
+    return obj
+      .filter(item => Boolean(compact(item)))
+      .map(compact);
   } else if (typeof obj === 'object' && obj !== null) {
-      const result = {};
-      for (const key in obj) {
-          const compactedValue = compact(obj[key]);
-          if (Boolean(compactedValue)) {
-              result[key] = compactedValue;
-          }
+    const result = {};
+    for (const key in obj) {
+      const compactedValue = compact(obj[key]);
+      if (Boolean(compactedValue)) {
+        result[key] = compactedValue;
       }
-      return result;
+    }
+    return result;
   } else {
-      return obj;
+    return obj;
   }
 }
 
@@ -637,26 +637,26 @@ console.log(compact(obj3));  // Output: [5, [], [16]]
 // Return the merged string. (C++)
 
 
-#include <string>
+#include < string >
 
-class Solution {
-public:
-    std::string mergeAlternately(std::string word1, std::string word2) {
-        std::string merged;
-        int maxLength = std::max(word1.length(), word2.length());
+  class Solution {
+    public:
+      std::string mergeAlternately(std:: string word1, std:: string word2) {
+  std::string merged;
+        int maxLength = std:: max(word1.length(), word2.length());
 
-        for (int i = 0; i < maxLength; i++) {
-            if (i < word1.length()) {
-                merged.push_back(word1[i]);
-            }
-
-            if (i < word2.length()) {
-                merged.push_back(word2[i]);
-            }
-        }
-
-        return merged;
+  for (int i = 0; i < maxLength; i++) {
+    if (i < word1.length()) {
+      merged.push_back(word1[i]);
     }
+
+    if (i < word2.length()) {
+      merged.push_back(word2[i]);
+    }
+  }
+
+  return merged;
+}
 };
 
 // Question 22: Create a class ArrayWrapper that accepts an array of integers in its constructor. This class should have two features:
@@ -665,15 +665,15 @@ public:
 
 class ArrayWrapper {
   constructor(nums) {
-      this.array = nums;
+    this.array = nums;
   }
 
   valueOf() {
-      return this.array.reduce((sum, num) => sum + num, 0);
+    return this.array.reduce((sum, num) => sum + num, 0);
   }
 
   toString() {
-      return '[' + this.array.join(',') + ']';
+    return '[' + this.array.join(',') + ']';
   }
 }
 
@@ -695,54 +695,54 @@ console.log(stringResult); // Output: "[23,98,42,70]"
 // Question 23 : Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. 
 // If target exists, then return its index. Otherwise, return -1.You must write an algorithm with O(log n) runtime complexity.
 
-#include <vector>
+#include < vector >
 
-class Solution {
-public:
-    int search(std::vector<int>& nums, int target) {
+  class Solution {
+    public:
+      int search(std:: vector<int>& nums, int target) {
         int left = 0, right = nums.size() - 1;
 
-        while (left <= right) {
+  while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            if (nums[mid] == target) {
-                return mid; // Target found
-            } else if (nums[mid] < target) {
-                left = mid + 1; // Target is in the right half
-            } else {
-                right = mid - 1; // Target is in the left half
-            }
-        }
-
-        return -1; // Target not found
+    if (nums[mid] == target) {
+      return mid; // Target found
+    } else if (nums[mid] < target) {
+      left = mid + 1; // Target is in the right half
+    } else {
+      right = mid - 1; // Target is in the left half
     }
+  }
+
+  return -1; // Target not found
+}
 };
 
 
 // Question 24: Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
 // You must write an algorithm with O(log n) runtime complexity.A
 
-#include <vector>
+#include < vector >
 
-class Solution {
-public:
-    int searchInsert(std::vector<int>& nums, int target) {
+  class Solution {
+    public:
+      int searchInsert(std:: vector<int>& nums, int target) {
         int left = 0, right = nums.size() - 1;
 
-        while (left <= right) {
+  while (left <= right) {
             int mid = left + (right - left) / 2;
 
-            if (nums[mid] == target) {
-                return mid; // Target found
-            } else if (nums[mid] < target) {
-                left = mid + 1; // Target is in the right half
-            } else {
-                right = mid - 1; // Target is in the left half
-            }
-        }
-
-        return left; // Target not found, return the position where it should be inserted
+    if (nums[mid] == target) {
+      return mid; // Target found
+    } else if (nums[mid] < target) {
+      left = mid + 1; // Target is in the right half
+    } else {
+      right = mid - 1; // Target is in the left half
     }
+  }
+
+  return left; // Target not found, return the position where it should be inserted
+}
 };
 
 // Question 25:You are given an array of characters letters that is sorted in non-decreasing order, and a character target. There are at least two different characters in letters.
@@ -751,36 +751,36 @@ public:
 
 
 
-#include <vector>
+#include < vector >
 
-class Solution {
-public:
-    char nextGreatestLetter(std::vector<char>& letters, char target) {
+  class Solution {
+    public:
+      char nextGreatestLetter(std:: vector<char>& letters, char target) {
         int left = 0, right = letters.size();
 
-        while (left < right) {
+  while (left < right) {
             int mid = left + (right - left) / 2;
 
-            if (letters[mid] <= target) {
-                left = mid + 1;  // Target is in the right half
-            } else {
-                right = mid;  // Target is in the left half or current character is a potential answer
-            }
-        }
-
-        // If right is equal to the size of the array, wrap around to the beginning
-        return letters[right % letters.size()];
+    if (letters[mid] <= target) {
+      left = mid + 1;  // Target is in the right half
+    } else {
+      right = mid;  // Target is in the left half or current character is a potential answer
     }
+  }
+
+  // If right is equal to the size of the array, wrap around to the beginning
+  return letters[right % letters.size()];
+}
 };
 
 
 // Question 26 : Given a m x n matrix grid which is sorted in non-increasing order both row-wise and column-wise, return the number of negative numbers in grid.
 
-#include <vector>
+#include < vector >
 
-class Solution {
-public:
-    int countNegatives(std::vector<std::vector<int>>& grid) {
+  class Solution {
+    public:
+      int countNegatives(std:: vector<std:: vector<int>>& grid) {
         int count = 0;
         int rows = grid.size();
         int cols = grid[0].size();
@@ -788,28 +788,28 @@ public:
         int row = 0;
         int col = cols - 1;
 
-        while (row < rows && col >= 0) {
-            if (grid[row][col] < 0) {
-                count += (rows - row); // All elements below the current row are negative
-                col--; // Move left in the same row
-            } else {
-                row++; // Move down to the next row
-            }
-        }
-
-        return count;
+  while (row < rows && col >= 0) {
+    if (grid[row][col] < 0) {
+      count += (rows - row); // All elements below the current row are negative
+      col--; // Move left in the same row
+    } else {
+      row++; // Move down to the next row
     }
+  }
+
+  return count;
+}
 };
 
 
 // Question 27 :For two strings s and t, we say "t divides s" if and only if s = t + ... + t (i.e., t is concatenated with itself one or more times).
 // Given two strings str1 and str2, return the largest string x such that x divides both str1 and str2.
 
-#include <string>
+#include < string >
 
-class Solution {
-public:
-    string gcdOfStrings(string str1, string str2) {
+  class Solution {
+    public:
+      string gcdOfStrings(string str1, string str2) {
         int len1 = str1.length();
         int len2 = str2.length();
 
@@ -821,90 +821,302 @@ public:
 
         // Check if the substring is a valid divisor for both strings
         if (isDivisor(str1, substring) && isDivisor(str2, substring)) {
-            return substring;
+          return substring;
         } else {
-            return "";
+          return "";
         }
-    }
+      }
 
-private:
-    // Function to find the GCD of two numbers
-    int gcd(int a, int b) {
+    private:
+      // Function to find the GCD of two numbers
+      int gcd(int a, int b) {
         return b == 0 ? a : gcd(b, a % b);
-    }
+      }
 
     // Function to check if 'substring' is a valid divisor of 'str'
     bool isDivisor(string str, string substring) {
         int strLen = str.length();
         int subLen = substring.length();
 
-        // Check if 'substring' can divide 'str' completely
-        for (int i = 0; i < strLen; i += subLen) {
-            if (str.substr(i, subLen) != substring) {
-                return false;
-            }
+      // Check if 'substring' can divide 'str' completely
+      for (int i = 0; i < strLen; i += subLen) {
+        if (str.substr(i, subLen) != substring) {
+          return false;
         }
+      }
 
-        return true;
+      return true;
     }
-};
+  };
 
 
 
 // Question 28 : Return a boolean array result of length n, where result[i] is true if, after giving the ith kid all the extraCandies, they will have the greatest number of candies among all the kids, or false otherwise.
 // Note that multiple kids can have the greatest number of candies.
 
- 
 
-#include <vector>
 
-class Solution {
-public:
-    std::vector<bool> kidsWithCandies(std::vector<int>& candies, int extraCandies) {
-        int maxCandies = *std::max_element(candies.begin(), candies.end());
+#include < vector >
 
-        std::vector<bool> result;
-        for (int i = 0; i < candies.size(); ++i) {
-            result.push_back(candies[i] + extraCandies >= maxCandies);
-        }
+  class Solution {
+    public:
+      std:: vector<bool> kidsWithCandies(std:: vector<int>& candies, int extraCandies) {
+        int maxCandies = * std:: max_element(candies.begin(), candies.end());
 
-        return result;
-    }
+  std:: vector < bool > result;
+  for (int i = 0; i < candies.size(); ++i) {
+    result.push_back(candies[i] + extraCandies >= maxCandies);
+  }
+
+  return result;
+}
 };
 
 // Question 29 : Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
 // The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.You must write an algorithm that runs in O(n) time and without using the division operation.
 
+#include < vector >
+
+  class Solution {
+    public:
+      std:: vector<int> productExceptSelf(std:: vector<int>& nums) {
+        int n = nums.size();
+  std:: vector < int > left(n, 1);   // Initialize left array
+  std:: vector < int > right(n, 1);  // Initialize right array
+  std:: vector < int > result(n, 1); // Initialize result array
+
+        // Compute left array
+        int leftProduct = 1;
+  for (int i = 1; i < n; ++i) {
+    leftProduct *= nums[i - 1];
+    left[i] = leftProduct;
+  }
+
+        // Compute right array
+        int rightProduct = 1;
+  for (int i = n - 2; i >= 0; --i) {
+    rightProduct *= nums[i + 1];
+    right[i] = rightProduct;
+  }
+
+  // Compute result array
+  for (int i = 0; i < n; ++i) {
+    result[i] = left[i] * right[i];
+  }
+
+  return result;
+}
+};
+
+
+// Question 30 : You have a long flowerbed in which some of the plots are planted, and some are not. However, flowers cannot be planted in adjacent plots.
+// Given an integer array flowerbed containing 0's and 1's, where 0 means empty and 1 means not empty, and an integer n, return true if n new flowers can be planted in the flowerbed without violating the no-adjacent-flowers rule and false otherwise.
+
+// Example 1:
+
+// Input: flowerbed = [1,0,0,0,1], n = 1
+// Output: true
+
+#include < vector >
+
+  class Solution {
+    public:
+      bool canPlaceFlowers(std:: vector<int>& flowerbed, int n) {
+        int count = 0;
+        int size = flowerbed.size();
+
+  for (int i = 0; i < size; ++i) {
+    if (flowerbed[i] == 0) {
+                int prev = (i == 0) ? 0 : flowerbed[i - 1];
+                int next = (i == size - 1) ? 0 : flowerbed[i + 1];
+
+      if (prev == 0 && next == 0) {
+        flowerbed[i] = 1;
+        ++count;
+        ++i;  // Skip the next plot since it's not allowed to plant adjacent flowers
+      }
+    }
+  }
+
+  return count >= n;
+}
+};
+
+// Question 31 :Given a string s, reverse only all the vowels in the string and return it.
+// The vowels are 'a', 'e', 'i', 'o', and 'u', and they can appear in both lower and upper cases, more than once.
+// Example 1:
+
+// Input: s = "hello"
+// Output: "holle"
+// Example 2:
+
+// Input: s = "leetcode"
+// Output: "leotcede"
+
+#include < string >
+  #include < unordered_set >
+
+  class Solution {
+    public:
+      string reverseVowels(string s) {
+        int left = 0;
+        int right = s.size() - 1;
+        unordered_set < char > vowels = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' };
+
+        while (left < right) {
+          // Find the first vowel from the left
+          while (left < right && vowels.find(s[left]) == vowels.end()) {
+            ++left;
+          }
+
+          // Find the first vowel from the right
+          while (left < right && vowels.find(s[right]) == vowels.end()) {
+            --right;
+          }
+
+          // Swap the vowels
+          if (left < right) {
+            swap(s[left], s[right]);
+            ++left;
+            --right;
+          }
+        }
+
+        return s;
+      }
+  };
+
+// Question 32: Given an input string s, reverse the order of the words.
+// A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+// Return a string of the words in reverse order concatenated by a single space.
+// Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra spaces.
+
+// Example 1:
+
+// Input: s = "the sky is blue"
+// Output: "blue is sky the"
+// Example 2:
+
+// Input: s = "  hello world  "
+// Output: "world hello"
+// Explanation: Your reversed string should not contain leading or trailing spaces.
+
+#include < sstream >
+
+  class Solution {
+    public:
+      string reverseWords(string s) {
+        // Reverse the entire string
+        reverse(s.begin(), s.end());
+
+        int start = 0;
+        int end = 0;
+        int n = s.size();
+
+        while (start < n) {
+          // Find the start of a word
+          while (start < n && s[start] == ' ') {
+            ++start;
+          }
+
+          // Find the end of the word
+          end = start;
+          while (end < n && s[end] != ' ') {
+            ++end;
+          }
+
+          // Reverse the word
+          reverse(s.begin() + start, s.begin() + end);
+
+          // Move to the next word
+          start = end;
+        }
+
+        // Remove extra spaces
+        stringstream ss(s);
+        string result;
+        string word;
+        while (ss >> word) {
+          if (!result.empty()) {
+            result = result + " " + word;
+          } else {
+            result = word;
+          }
+        }
+
+        return result;
+      }
+  };
+
+// Question 33:Given an integer array nums, return true if there exists a triple of indices(i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k].If no such indices exists, return false.
+
+
+//   Example 1:
+
+// Input: nums = [1, 2, 3, 4, 5]
+// Output: true
+// Explanation: Any triplet where i < j < k is valid.
+//   Example 2:
+
+// Input: nums = [5, 4, 3, 2, 1]
+// Output: false
+// Explanation: No triplet exists.
+//   Example 3:
+
+// Input: nums = [2, 1, 5, 0, 4, 6]
+// Output: true
+// Explanation: The triplet(3, 4, 5) is valid because nums[3] == 0 < nums[4] == 4 < nums[5] == 6.
+
 #include <vector>
 
 class Solution {
 public:
-    std::vector<int> productExceptSelf(std::vector<int>& nums) {
-        int n = nums.size();
-        std::vector<int> left(n, 1);   // Initialize left array
-        std::vector<int> right(n, 1);  // Initialize right array
-        std::vector<int> result(n, 1); // Initialize result array
+    bool increasingTriplet(std::vector<int>& nums) {
+        int first = INT_MAX;
+        int second = INT_MAX;
 
-        // Compute left array
-        int leftProduct = 1;
-        for (int i = 1; i < n; ++i) {
-            leftProduct *= nums[i - 1];
-            left[i] = leftProduct;
+        for (int num : nums) {
+            if (num <= first) {
+                first = num;
+            } else if (num <= second) {
+                second = num;
+            } else {
+                // Found a triplet
+                return true;
+            }
         }
 
-        // Compute right array
-        int rightProduct = 1;
-        for (int i = n - 2; i >= 0; --i) {
-            rightProduct *= nums[i + 1];
-            right[i] = rightProduct;
-        }
-
-        // Compute result array
-        for (int i = 0; i < n; ++i) {
-            result[i] = left[i] * right[i];
-        }
-
-        return result;
+        return false;
     }
 };
 
+
+// Question 34 :You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+// Find two lines that together with the x-axis form a container, such that the container contains the most water.Return the maximum amount of water a container can store.
+
+#include <vector>
+
+class Solution {
+public:
+    int maxArea(std::vector<int>& height) {
+        int maxArea = 0;
+        int left = 0;
+        int right = height.size() - 1;
+
+        while (left < right) {
+            int h = std::min(height[left], height[right]);
+            int w = right - left;
+            int area = h * w;
+
+            maxArea = std::max(maxArea, area);
+
+            if (height[left] < height[right]) {
+                ++left;
+            } else {
+                --right;
+            }
+        }
+
+        return maxArea;
+    }
+};
