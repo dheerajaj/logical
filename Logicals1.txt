@@ -196,3 +196,496 @@ public:
         return (totalGas < 0) ? -1 : startingStation;
     }
 };
+
+
+Question 56 : Given a string s consisting of words and spaces, return the length of the last word in the string.
+A word is a maximal substring consisting of non-space characters only.
+
+Example 1:
+
+Input: s = "Hello World"
+Output: 5
+Explanation: The last word is "World" with length 5.
+
+Solution :
+
+#include <iostream>
+#include <string>
+
+class Solution {
+public:
+    int lengthOfLastWord(std::string s) {
+        int length = 0;
+        int i = s.length() - 1;
+
+        // Skip trailing spaces
+        while (i >= 0 && s[i] == ' ') {
+            i--;
+        }
+
+        // Count the length of the last word
+        while (i >= 0 && s[i] != ' ') {
+            length++;
+            i--;
+        }
+
+        return length;
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::string s1 = "Hello World";
+    std::cout << "Example 1: " << solution.lengthOfLastWord(s1) << std::endl;
+
+    // Example 2
+    std::string s2 = "   fly me   to   the moon  ";
+    std::cout << "Example 2: " << solution.lengthOfLastWord(s2) << std::endl;
+
+    return 0;
+}
+
+
+Question 57 :Write a function to find the longest common prefix string amongst an array of strings.
+If there is no common prefix, return an empty string "".
+
+Example 1:
+
+Input: strs = ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: strs = ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+
+Solution : #include <iostream>
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    std::string longestCommonPrefix(std::vector<std::string>& strs) {
+        if (strs.empty()) {
+            return ""; // If the input vector is empty, return an empty string
+        }
+
+        // Iterate through characters in the first string
+        for (int i = 0; i < strs[0].length(); i++) {
+            // Check the current character against the same position in other strings
+            for (int j = 1; j < strs.size(); j++) {
+                // If the current character is not common, return the prefix found so far
+                if (i >= strs[j].length() || strs[j][i] != strs[0][i]) {
+                    return strs[0].substr(0, i);
+                }
+            }
+        }
+
+        // If the loop completes, the entire first string is a common prefix
+        return strs[0];
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::vector<std::string> strs1 = {"flower", "flow", "flight"};
+    std::cout << "Example 1: " << solution.longestCommonPrefix(strs1) << std::endl;
+
+    // Example 2
+    std::vector<std::string> strs2 = {"dog", "racecar", "car"};
+    std::cout << "Example 2: " << solution.longestCommonPrefix(strs2) << std::endl;
+
+    return 0;
+}
+
+
+Question 58 : Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+
+Example 1:
+
+Input: haystack = "sadbutsad", needle = "sad"
+Output: 0
+Explanation: "sad" occurs at index 0 and 6.
+The first occurrence is at index 0, so we return 0.
+Example 2:
+
+Input: haystack = "leetcode", needle = "leeto"
+Output: -1
+Explanation: "leeto" did not occur in "leetcode", so we return -1.
+
+Solution :
+#include <iostream>
+#include <string>
+
+class Solution {
+public:
+    int strStr(std::string haystack, std::string needle) {
+        int m = haystack.length();
+        int n = needle.length();
+
+        // Check edge cases
+        if (n == 0) {
+            return 0; // Empty needle, return 0
+        }
+
+        if (m < n) {
+            return -1; // Needle longer than haystack, not possible
+        }
+
+        for (int i = 0; i <= m - n; ++i) {
+            int j;
+            // Check if needle matches the substring of haystack starting at position i
+            for (j = 0; j < n; ++j) {
+                if (haystack[i + j] != needle[j]) {
+                    break; // Mismatch, break out of the loop
+                }
+            }
+
+            if (j == n) {
+                return i; // Entire needle matches, return the starting index
+            }
+        }
+
+        return -1; // Needle not found in haystack
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::string haystack1 = "sadbutsad";
+    std::string needle1 = "sad";
+    std::cout << "Example 1: " << solution.strStr(haystack1, needle1) << std::endl;
+
+    // Example 2
+    std::string haystack2 = "leetcode";
+    std::string needle2 = "leeto";
+    std::cout << "Example 2: " << solution.strStr(haystack2, needle2) << std::endl;
+
+    return 0;
+}
+
+Question 59 : Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly maxWidth characters.
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+For the last line of text, it should be left-justified, and no extra space is inserted between words.
+
+Solution :
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    std::vector<std::string> fullJustify(std::vector<std::string>& words, int maxWidth) {
+        std::vector<std::string> result;
+        int start = 0;
+
+        while (start < words.size()) {
+            int end = start + 1;
+            int currentLength = words[start].length();
+
+            // Determine the words to be included in the current line
+            while (end < words.size() && currentLength + 1 + words[end].length() <= maxWidth) {
+                currentLength += 1 + words[end].length();
+                end++;
+            }
+
+            // Create the justified line
+            std::string line = words[start];
+            int extraSpaces = maxWidth - currentLength;
+
+            if (end == words.size() || end - start == 1) {
+                // Left-justify the last line or a line with a single word
+                for (int i = start + 1; i < end; i++) {
+                    line += ' ' + words[i];
+                }
+                line += std::string(maxWidth - line.length(), ' ');  // Adjust for extra spaces
+            } else {
+                // Distribute extra spaces between words evenly
+                int spacesBetweenWords = extraSpaces / (end - start - 1);
+                int extraSpacesLeft = extraSpaces % (end - start - 1);
+
+                for (int i = start + 1; i < end; i++) {
+                    int spaces = spacesBetweenWords + (i - start <= extraSpacesLeft ? 1 : 0);
+                    line += std::string(spaces, ' ') + words[i];
+                }
+            }
+
+            result.push_back(line);
+            start = end;
+        }
+
+        return result;
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::vector<std::string> words1 = {"This", "is", "an", "example", "of", "text", "justification."};
+    int maxWidth1 = 16;
+    std::vector<std::string> result1 = solution.fullJustify(words1, maxWidth1);
+    for (const auto& line : result1) {
+        std::cout << line << std::endl;
+    }
+
+    // Example 2
+    std::vector<std::string> words2 = {"What", "must", "be", "acknowledgment", "shall", "be"};
+    int maxWidth2 = 16;
+    std::vector<std::string> result2 = solution.fullJustify(words2, maxWidth2);
+    for (const auto& line : result2) {
+        std::cout << line << std::endl;
+    }
+
+    return 0;
+}
+
+Question 60 : A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+Given a string s, return true if it is a palindrome, or false otherwise.
+
+Example 1:
+
+Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: "amanaplanacanalpanama" is a palindrome.
+Example 2:
+
+Input: s = "race a car"
+Output: false
+Explanation: "raceacar" is not a palindrome.
+
+Solution : #include <iostream>
+#include <string>
+#include <cctype>
+
+class Solution {
+public:
+    bool isPalindrome(std::string s) {
+        // Convert to lowercase and remove non-alphanumeric characters
+        std::string modifiedString;
+        for (char c : s) {
+            if (std::isalnum(c)) {
+                modifiedString += std::tolower(c);
+            }
+        }
+
+        // Check if the modified string is a palindrome
+        int left = 0;
+        int right = modifiedString.length() - 1;
+
+        while (left < right) {
+            if (modifiedString[left] != modifiedString[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::string s1 = "A man, a plan, a canal: Panama";
+    std::cout << "Example 1: " << std::boolalpha << solution.isPalindrome(s1) << std::endl;
+
+    // Example 2
+    std::string s2 = "race a car";
+    std::cout << "Example 2: " << std::boolalpha << solution.isPalindrome(s2) << std::endl;
+
+    return 0;
+}
+
+Question 61 : Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+
+ 
+Example 1:
+
+Input: s = "abc", t = "ahbgdc"
+Output: true
+Example 2:
+
+Input: s = "axc", t = "ahbgdc"
+Output: false
+
+Solution :
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int sIndex = 0, tIndex = 0;
+
+        while (sIndex < s.size() && tIndex < t.size()) {
+            if (s[sIndex] == t[tIndex]) {
+                sIndex++;
+            }
+            tIndex++;
+        }
+
+        // If sIndex reaches the end of s, all characters in s have been found in order in t
+        return sIndex == s.size();
+    }
+};
+
+Question 62 : Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
+Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.
+The tests are generated such that there is exactly one solution. You may not use the same element twice.
+Your solution must use only constant extra space.
+
+Example 1:
+
+Input: numbers = [2,7,11,15], target = 9
+Output: [1,2]
+Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].
+Example 2:
+
+Input: numbers = [2,3,4], target = 6
+Output: [1,3]
+Explanation: The sum of 2 and 4 is 6. Therefore index1 = 1, index2 = 3. We return [1, 3].
+
+Solution :
+#include <iostream>
+#include <vector>
+
+class Solution {
+public:
+    std::vector<int> twoSum(std::vector<int>& numbers, int target) {
+        int left = 0;
+        int right = numbers.size() - 1;
+
+        while (left < right) {
+            int sum = numbers[left] + numbers[right];
+            if (sum == target) {
+                return {left + 1, right + 1}; // Indices are 1-indexed
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        // No solution found, return empty vector
+        return {};
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example 1
+    std::vector<int> numbers1 = {2, 7, 11, 15};
+    int target1 = 9;
+    std::vector<int> result1 = solution.twoSum(numbers1, target1);
+    std::cout << "Example 1: [" << result1[0] << ", " << result1[1] << "]" << std::endl;
+
+    // Example 2
+    std::vector<int> numbers2 = {2, 3, 4};
+    int target2 = 6;
+    std::vector<int> result2 = solution.twoSum(numbers2, target2);
+    std::cout << "Example 2: [" << result2[0] << ", " << result2[1] << "]" << std::endl;
+
+    return 0;
+}
+
+
+Question 63 : Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+Notice that the solution set must not contain duplicate triplets.
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: 
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter
+
+Solution : #include <iostream>
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    std::vector<std::vector<int>> threeSum(std::vector<int>& nums) {
+        std::vector<std::vector<int>> result;
+        int n = nums.size();
+
+        // Sort the array
+        std::sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < n - 2; ++i) {
+            // Skip duplicate triplets
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            int target = -nums[i];
+            int left = i + 1;
+            int right = n - 1;
+
+            while (left < right) {
+                int sum = nums[left] + nums[right];
+
+                if (sum == target) {
+                    result.push_back({nums[i], nums[left], nums[right]});
+                    
+                    // Skip duplicate pairs
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+
+                    // Move pointers
+                    left++;
+                    right--;
+                } else if (sum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+
+        return result;
+    }
+};
+
+int main() {
+    Solution solution;
+
+    // Example
+    std::vector<int> nums = {-1, 0, 1, 2, -1, -4};
+    std::vector<std::vector<int>> result = solution.threeSum(nums);
+
+    std::cout << "Output:" << std::endl;
+    for (const auto& triplet : result) {
+        std::cout << "[";
+        for (int num : triplet) {
+            std::cout << num << ",";
+        }
+        std::cout << "]" << std::endl;
+    }
+
+    return 0;
+}
+
