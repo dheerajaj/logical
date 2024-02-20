@@ -689,3 +689,86 @@ int main() {
     return 0;
 }
 
+
+Question 64 : Given an array of positive integers nums and a positive integer target, return the minimal length of a 
+subarray  whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+
+Example 1:
+
+Input: target = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+Example 2:
+
+Input: target = 4, nums = [1,4,4]
+Output: 1
+
+
+Solution :
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n = nums.size();
+        int minLength = n + 1; // Initialize to a value greater than n
+        
+        int left = 0, right = 0;
+        int sum = 0;
+        
+        while (right < n) {
+            sum += nums[right];
+            while (sum >= target) {
+                minLength = min(minLength, right - left + 1);
+                sum -= nums[left];
+                left++;
+            }
+            right++;
+        }
+        
+        return (minLength == n + 1) ? 0 : minLength;
+    }
+};
+
+Question 65 : Given a string s, find the length of the longest substring  without repeating characters.
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+
+Solution :
+
+#include <string>
+#include <unordered_set>
+using namespace std;
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_set<char> seen;
+        int maxLength = 0;
+        int left = 0, right = 0;
+        
+        while (right < s.length()) {
+            char currentChar = s[right];
+            if (seen.find(currentChar) == seen.end()) {
+                seen.insert(currentChar);
+                maxLength = max(maxLength, right - left + 1);
+                right++;
+            } else {
+                seen.erase(s[left]);
+                left++;
+            }
+        }
+        
+        return maxLength;
+    }
+};
